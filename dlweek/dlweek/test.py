@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
-import os
-import sys
-
 import pickle
 import re
 import pandas as pd
@@ -94,20 +89,12 @@ class FakeNewsModel:
         print(f"Model and pre-processing function loaded from {filename}")
         return model
 
+with open("./fake_news_model.pkl", "rb") as f:
+    test = pickle.load(f)# Provide some text (real or fake news headline)
+test_text = "Sample news headline about the stock market and economy"
 
-def main():
-    """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dlweek.settings')
-    try:
-        from django.core.management import execute_from_command_line
-    except ImportError as exc:
-        raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
-        ) from exc
-    execute_from_command_line(sys.argv)
+# Get the likelihood of the text being fake news
+prob_fake = test.predict_fake_news(test_text)
 
-
-if __name__ == '__main__':
-    main()
+# Output the result
+print(f"Likelihood of being fake news: {prob_fake:.2f}")
